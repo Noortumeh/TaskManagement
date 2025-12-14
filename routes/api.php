@@ -22,6 +22,9 @@ Route::middleware('auth:sanctum')->group(function(){
 Route::prefix('tasks')->group(function(){
 Route::post('/', [TaskController::class, 'store']);
 Route::get('/', [TaskController::class, 'index']);
+//Admin only routes
+Route::get('/all', [TaskController::class, 'getAllTasks'])->middleware('CheckUserRole');
+//
 Route::get('/{id}', [TaskController::class, 'show']);
 Route::put('/{id}', [TaskController::class, 'update']);
 Route::delete('/{id}', [TaskController::class, 'destroy']);
