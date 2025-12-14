@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTaskRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Auth::user()->tasks;
 
         return response()->json($tasks, 200);
     }
@@ -22,7 +24,10 @@ class TaskController extends Controller
         //     'is_completed' => 'boolean',
         //     'priority' => 'integer|min:0|max:5',
         // ]);
-        $task = Task::create($request->validated());
+        $user_id = Auth::user()->id;
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = $user_id;
+        $task = Task::create($validatedData);
 
         return response()->json($task, 200);
     }
@@ -39,7 +44,13 @@ class TaskController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user_id = Auth::user()->id;
         $task = Task::find($id);
+
+        if( $task && $task->user_id != $user_id){
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         if ($task) {
             $task->update($request->only(['title', 'description', 'is_completed', 'priority']));
             return response()->json($task, 200);

@@ -13,6 +13,7 @@ class Task extends Model
         'description',
         'is_completed',
         'priority',
+        'user_id',
     ];
 
     protected $casts = [
