@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('is_completed')->default(false);
             $table->integer('priority')->default(0);
+            // i will update priority to enum by using another migration * This is the best way to do it in real project
+            // $table->enum('priority',['high', 'medium', 'low'])->default('medium');
             $table->timestamps();
         });
     }

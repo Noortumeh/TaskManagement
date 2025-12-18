@@ -26,7 +26,7 @@ class StoreTaskRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'is_completed' => 'boolean',
-            'priority' => 'integer|min:0|max:5',
+            'priority' => 'integer|in:high,medium,low',
         ];
     }
 }

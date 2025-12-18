@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTaskRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class TaskController extends Controller
 {
@@ -18,6 +19,13 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Auth::user()->tasks;
+
+        return response()->json($tasks, 200);
+    }
+
+    public function getTasksByPriority()
+    {
+        $tasks = Auth::user()->tasks()->orderByRaw('FIELD(priority, "high", "medium", "low")')->get();
 
         return response()->json($tasks, 200);
     }
@@ -100,5 +108,24 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $categories = $task -> categories;
         return response()->json($categories, 200);
+    }
+    // Add task to favorites
+    public function addToFavorites($id){
+        $task = Task::findOrFail($id);
+        $user = Auth::user();
+        $user->favoriteTasks()->attach($task->id);
+        return response()->json(['message' => 'Task added to favorites'], 200);
+    }
+
+    public function removeFromFavorites($id){
+        Task::findOrFail($id);
+        Auth::user()->favoriteTasks()->detach($id);
+        return response()->json(['message' => 'Task removed from favorites'], 200);
+    }
+
+    public function getFavoriteTasks($userId){
+        $user = User::findOrFail($userId);
+        $favoriteTasks = $user->favoriteTasks;
+        return response()->json($favoriteTasks, 200);
     }
 }

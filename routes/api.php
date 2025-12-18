@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function(){
 Route::prefix('tasks')->group(function(){
 Route::post('/', [TaskController::class, 'store']);
 Route::get('/', [TaskController::class, 'index']);
+Route::get('/priority', [TaskController::class, 'getTasksByPriority']);
 //Admin only routes
 Route::get('/all', [TaskController::class, 'getAllTasks'])->middleware('CheckUserRole');
 //
@@ -42,6 +43,10 @@ Route::get('task/{id}/user', [TaskController::class, 'getTaskUser']);
 // Routes for Categories and Tasks
 Route::post('task/{id}/categories', [TaskController::class, 'assignCategories']);
 Route::get('task/{id}/categories', [TaskController::class, 'getTaskCategories']);
+// Favorite Routes
+Route::post('task/{id}/favorite', [TaskController::class, 'addToFavorites']);
+Route::delete('task/{id}/favorite', [TaskController::class, 'removeFromFavorites']);
+Route::get('user/{id}/favorites', [TaskController::class, 'getFavoriteTasks']);
 });
 
 
