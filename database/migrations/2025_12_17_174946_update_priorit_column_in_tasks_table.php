@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            if (! Schema::hasColumn('tasks', 'priority_new')) {
+            if (! Schema::hasColumn('tasks', 'priority_new') && Schema::hasColumn('tasks', 'priority')) {
                 $table->enum('priority_new', ['high', 'medium', 'low'])
-                    ->default('medium')
                     ->after('priority');
             }
         });

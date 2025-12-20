@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -51,10 +52,11 @@ class UserController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
     //
-    public function checkUser($id)
+    public function getUser()
     {
-        // For demonstration, we will just return the user ID received
-        return response()->json(['user_id' => $id]);
+        $id = Auth::user()->id;
+        $user = User::with('profile')->findOrFail($id);
+        return new UserResource($user);
     }
     public function getProfile($id)
     {

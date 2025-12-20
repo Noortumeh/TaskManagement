@@ -9,10 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // User Auth Routes
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
@@ -35,9 +31,10 @@ Route::delete('/{id}', [TaskController::class, 'destroy']);
 
 // Profiles Routes
 Route::apiResource('profiles', ProfileController::class);
-//
+// Get Profile by User ID
 Route::get('user/{id}/profile', [UserController::class, 'getProfile']);
 //
+Route::get('/user', [UserController::class, 'getUser']);
 Route::get('user/{id}/tasks', [UserController::class, 'getTasks']);
 Route::get('task/{id}/user', [TaskController::class, 'getTaskUser']);
 // Routes for Categories and Tasks

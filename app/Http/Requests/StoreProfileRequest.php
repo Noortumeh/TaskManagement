@@ -27,6 +27,7 @@ class StoreProfileRequest extends FormRequest
             'address' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
             'bio' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
